@@ -410,7 +410,7 @@ This project is proprietary software for Baze MSSN.
 
 ## 👨‍💻 Author
 
-For any issues or questions, contact: **abbaphy@gmail.com**
+For any issues or questions, contact: **amansurmusawa@gmail.com**
 
 ---
 
