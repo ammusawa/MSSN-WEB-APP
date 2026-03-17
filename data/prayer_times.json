@@ -1,0 +1,36 @@
+{
+  "2025-12-11": {
+    "timings": {
+      "Fajr": "5:10",
+      "Sunrise": "6:25",
+      "Dhuhr": "12:30",
+      "Asr": "15:45",
+      "Maghrib": "18:30",
+      "Isha": "19:45"
+    },
+    "timingsAdhan": {
+      "Fajr": "5:10",
+      "Sunrise": "6:25",
+      "Dhuhr": "12:30",
+      "Asr": "15:45",
+      "Maghrib": "18:30",
+      "Isha": "19:45"
+    },
+    "timingsIqama": {
+      "Fajr": "",
+      "Dhuhr": "",
+      "Asr": "",
+      "Maghrib": "",
+      "Isha": ""
+    },
+    "date": {
+      "readable": "2025-12-11"
+    },
+    "dateInfo": {
+      "readable": "2025-12-11"
+    },
+    "meta": {
+      "timezone": "Africa/Lagos"
+    }
+  }
+}

@@ -1,0 +1,204 @@
+<% layout('layout') %>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h3 class="mb-1">Analysis & Statistics</h3>
+    <p class="text-muted small mb-0">Overview of users and content in the system</p>
+  </div>
+</div>
+
+<!-- User Statistics -->
+<div class="row g-4 mb-4">
+  <div class="col-12">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-success text-white">
+        <h5 class="mb-0"><i class="bi bi-people-fill me-2"></i>User Statistics</h5>
+      </div>
+      <div class="card-body">
+        <div class="row g-3 mb-4">
+          <div class="col-md-3">
+            <div class="text-center p-3 bg-light rounded">
+              <div class="h3 mb-1 text-primary"><%= userStats.total %></div>
+              <div class="small text-muted">Total Users</div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="text-center p-3 bg-light rounded">
+              <div class="h3 mb-1 text-danger"><%= userStats.superusers %></div>
+              <div class="small text-muted">Superusers</div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="text-center p-3 bg-light rounded">
+              <div class="h3 mb-1 text-warning"><%= userStats.admins %></div>
+              <div class="small text-muted">Ameers</div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="text-center p-3 bg-light rounded">
+              <div class="h3 mb-1 text-info"><%= userStats.executives %></div>
+              <div class="small text-muted">Executives</div>
+            </div>
+          </div>
+        </div>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="text-center p-3 bg-light rounded">
+              <div class="h3 mb-1 text-success"><%= userStats.members %></div>
+              <div class="small text-muted">Members</div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-4">
+
+        <h6 class="mb-3">Recent Users</h6>
+        <div class="table-responsive">
+          <table class="table table-sm table-hover">
+            <thead class="table-light">
+              <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Joined</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (userStats.recent && userStats.recent.length > 0) { %>
+                <% userStats.recent.forEach(user => { %>
+                  <tr>
+                    <td><%= user.username %></td>
+                    <td><%= user.email %></td>
+                    <td><%= (user.firstName || '') + ' ' + (user.lastName || '') %></td>
+                    <td><span class="badge bg-secondary"><%= user.role === 'ADMIN' ? 'AMEER' : (user.role || 'MEMBER') %></span></td>
+                    <td><%= new Date(user.createdAt).toLocaleDateString() %></td>
+                  </tr>
+                <% }) %>
+              <% } else { %>
+                <tr><td colspan="5" class="text-center text-muted">No users found</td></tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Content Statistics -->
+<div class="row g-4 mb-4">
+  <div class="col-12">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="bi bi-folder-fill me-2"></i>Content Statistics</h5>
+      </div>
+      <div class="card-body">
+        <div class="row g-3 mb-4">
+          <div class="col-md-3">
+            <div class="text-center p-3 bg-light rounded">
+              <div class="h3 mb-1 text-primary"><%= contentStats.resources %></div>
+              <div class="small text-muted">Resources</div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="text-center p-3 bg-light rounded">
+              <div class="h3 mb-1 text-info"><%= contentStats.categories %></div>
+              <div class="small text-muted">Categories</div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="text-center p-3 bg-light rounded">
+              <div class="h3 mb-1 text-success"><%= contentStats.announcements %></div>
+              <div class="small text-muted">Announcements</div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="text-center p-3 bg-light rounded">
+              <div class="h3 mb-1 text-warning"><%= contentStats.events %></div>
+              <div class="small text-muted">Events</div>
+            </div>
+          </div>
+        </div>
+        <div class="row g-3 mb-4">
+          <div class="col-md-3">
+            <div class="text-center p-3 bg-light rounded">
+              <div class="h3 mb-1 text-danger"><%= contentStats.donations %></div>
+              <div class="small text-muted">Donations</div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-4">
+
+        <h6 class="mb-3">Recent Resources</h6>
+        <div class="table-responsive">
+          <table class="table table-sm table-hover">
+            <thead class="table-light">
+              <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Uploaded</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (contentStats.recent && contentStats.recent.length > 0) { %>
+                <% contentStats.recent.forEach(resource => { %>
+                  <tr>
+                    <td><%= resource.title %></td>
+                    <td><span class="badge bg-info"><%= resource.ResourceCategory ? resource.ResourceCategory.name : 'Uncategorized' %></span></td>
+                    <td><%= new Date(resource.createdAt).toLocaleDateString() %></td>
+                  </tr>
+                <% }) %>
+              <% } else { %>
+                <tr><td colspan="3" class="text-center text-muted">No resources found</td></tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Activity Statistics -->
+<% if (activityStats) { %>
+<div class="row g-4">
+  <div class="col-12">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="bi bi-graph-up me-2"></i>Activity Statistics</h5>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <% if (activityStats.totalViews) { %>
+            <div class="col-md-4">
+              <div class="text-center p-3 bg-light rounded">
+                <div class="h3 mb-1 text-primary"><%= activityStats.totalViews || 0 %></div>
+                <div class="small text-muted">Total Views</div>
+              </div>
+            </div>
+          <% } %>
+          <% if (activityStats.totalDownloads) { %>
+            <div class="col-md-4">
+              <div class="text-center p-3 bg-light rounded">
+                <div class="h3 mb-1 text-success"><%= activityStats.totalDownloads || 0 %></div>
+                <div class="small text-muted">Total Downloads</div>
+              </div>
+            </div>
+          <% } %>
+          <% if (activityStats.totalLogins) { %>
+            <div class="col-md-4">
+              <div class="text-center p-3 bg-light rounded">
+                <div class="h3 mb-1 text-info"><%= activityStats.totalLogins || 0 %></div>
+                <div class="small text-muted">Total Logins</div>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% } %>
+

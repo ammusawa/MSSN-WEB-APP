@@ -1,0 +1,203 @@
+<% layout('layout') %>
+
+<!-- Header -->
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <div>
+    <h3 class="mb-1">RBAC: Roles</h3>
+    <div class="text-muted small">
+      <%= roles.length %> role<%= roles.length === 1 ? '' : 's' %> •
+      <%= permissions.length %> permission<%= permissions.length === 1 ? '' : 's' %>
+    </div>
+  </div>
+  <a href="/admin/dashboard" class="btn btn-sm btn-outline-success">
+    <i class="bi bi-speedometer2"></i> Dashboard
+  </a>
+</div>
+
+<!-- Create Role -->
+<div class="row g-4 mb-2">
+  <div class="col-md-6 col-xl-5">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body">
+        <h6 class="mb-1">Create Role</h6>
+        <p class="text-muted small mb-3">Add a new role. You can toggle permissions below.</p>
+        <form method="post" action="/admin/rbac/roles/create" class="row g-3">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+          <div class="col-md-6">
+            <label class="form-label small mb-1">Name</label>
+            <input class="form-control" name="name" placeholder="e.g. Editor" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small mb-1">Description</label>
+            <input class="form-control" name="description" placeholder="Optional">
+          </div>
+          <div class="col-12">
+            <button class="btn btn-success">
+              <i class="bi bi-plus-circle me-1"></i> Create
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Roles table -->
+<div class="card border-0 shadow-sm">
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-striped table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr class="small text-uppercase text-muted">
+            <th style="width: 14rem;">Role</th>
+            <th>Description</th>
+            <th style="min-width: 16rem;">Permissions</th>
+            <th style="min-width: 18rem;">Toggle Permissions</th>
+            <th style="min-width: 8rem;">Update</th>
+            <th style="min-width: 8rem;">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (!roles.length) { %>
+            <tr>
+              <td colspan="6" class="text-center py-5 text-muted">
+                <i class="bi bi-shield-lock me-1"></i> No roles yet.
+              </td>
+            </tr>
+          <% } %>
+
+          <% roles.forEach(r => { %>
+            <tr>
+              <!-- Role + count -->
+              <td class="fw-semibold">
+                <span class="me-2"><%= r.name %></span>
+                <span class="badge text-bg-secondary rounded-pill align-middle">
+                  <%= (r.Permissions?.length || 0) %>
+                </span>
+              </td>
+
+              <!-- Description -->
+              <td class="text-muted"><%= r.description || '—' %></td>
+
+              <!-- Current permissions (badges) -->
+              <td>
+                <div class="d-flex flex-wrap gap-1">
+                  <% if (r.Permissions && r.Permissions.length) { %>
+                    <% r.Permissions.forEach(p => { %>
+                      <span class="badge text-bg-light border" title="<%= p.label %>"><%= p.code %></span>
+                    <% }) %>
+                  <% } else { %>
+                    <span class="text-muted small">No permissions</span>
+                  <% } %>
+                </div>
+              </td>
+
+              <!-- Toggle permissions -->
+              <td>
+                <div class="d-flex flex-wrap gap-2">
+                  <% permissions.forEach(p => { 
+                       const has = !!r.Permissions?.some(x => x.id === p.id);
+                  %>
+                    <form method="post" action="/admin/rbac/roles/<%= r.id %>/perm" class="d-inline">
+                      <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+                      <input type="hidden" name="permissionId" value="<%= p.id %>"/>
+                      <input type="hidden" name="action" value="<%= has ? 'remove' : 'add' %>"/>
+                      <button
+                        class="btn btn-sm <%= has ? 'btn-outline-danger' : 'btn-outline-success' %>"
+                        data-bs-toggle="tooltip"
+                        data-bs-title="<%= has ? ('Remove ' + p.label) : ('Add ' + p.label) %>">
+                        <%= has ? 'Remove' : 'Add' %> <span class="d-none d-sm-inline"><%= p.code %></span>
+                      </button>
+                    </form>
+                  <% }) %>
+                </div>
+              </td>
+
+              <!-- Update (modal) -->
+              <td>
+                <button class="btn btn-sm btn-success w-100"
+                        data-bs-toggle="modal"
+                        data-bs-target="#editRoleModal-<%= r.id %>">
+                  <i class="bi bi-pencil-square"></i> Edit
+                </button>
+
+                <div class="modal fade" id="editRoleModal-<%= r.id %>" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <form method="post" action="/admin/rbac/roles/<%= r.id %>/update">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+                        <div class="modal-header">
+                          <h5 class="modal-title">Edit Role</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input class="form-control" name="name" value="<%= r.name %>" required>
+                          </div>
+                          <div>
+                            <label class="form-label">Description</label>
+                            <input class="form-control" name="description" value="<%= r.description || '' %>">
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button class="btn btn-primary">Save changes</button>
+                          <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Delete (confirm modal) -->
+              <td>
+                <button class="btn btn-sm btn-danger w-100"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteRoleModal-<%= r.id %>">
+                  <i class="bi bi-trash-fill"></i> Delete
+                </button>
+
+                <div class="modal fade" id="deleteRoleModal-<%= r.id %>" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <form method="post" action="/admin/rbac/roles/<%= r.id %>/delete">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+                        <div class="modal-header">
+                          <h5 class="modal-title text-danger">Delete Role</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <p class="mb-0">
+                            Are you sure you want to delete the role
+                            <span class="fw-semibold"><%= r.name %></span>?
+                            <br>
+                            <span class="text-muted small">
+                              This will unassign it from all users.
+                            </span>
+                          </p>
+                        </div>
+                        <div class="modal-footer">
+                          <button class="btn btn-danger">Yes, delete</button>
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, cancel</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Enable tooltips
+  document.addEventListener('DOMContentLoaded', function () {
+    var t = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    t.forEach(function (el) { new bootstrap.Tooltip(el); });
+  });
+</script>

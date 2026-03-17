@@ -1,0 +1,39 @@
+<% layout('layout') %>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3 class="mb-0">Categories</h3>
+  <a class="btn btn-sm btn-outline-success" href="/admin/dashboard">Dashboard</a>
+</div>
+<div class="row g-3 mb-4">
+  <div class="col-md-6">
+    <div class="p-3 border rounded">
+      <h6 class="mb-2">Create Category</h6>
+      <form method="post" action="/admin/categories/create">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+        <div class="row g-2">
+          <div class="col-md-6"><input class="form-control" name="name" placeholder="name" required></div>
+          <div class="col-md-6"><input class="form-control" name="slug" placeholder="slug" required></div>
+          <div class="col-12"><button class="btn btn-primary w-100">Create</button></div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="table-responsive">
+  <table class="table table-sm table-striped">
+    <thead><tr><th>Name</th><th>Slug</th><th>Actions</th></tr></thead>
+    <tbody>
+      <% categories.forEach(c => { %>
+        <tr>
+          <td><%= c.name %></td>
+          <td><%= c.slug %></td>
+          <td>
+            <form method="post" action="/admin/categories/<%= c.id %>/delete" onsubmit="return confirm('Delete category?')">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+              <button class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>

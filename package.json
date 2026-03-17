@@ -1,0 +1,47 @@
+{
+  "name": "mssn-repo-node",
+  "version": "1.1.0",
+  "description": "Baze MSSN Platform - Node.js + Express + EJS (with Admin UI)",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "db": "node scripts/db-setup.js",
+    "seed": "node scripts/seed-all.js",
+    "create-db": "node scripts/create-db.js",
+    "sync": "node scripts/sync.js",
+    "seed:admin": "node scripts/seed-admin.js",
+    "reset:admin": "node scripts/reset-admin.js",
+    "seed:categories": "node scripts/seed-categories.js",
+    "seed:rbac": "node scripts/seed-perms-roles.js",
+    "seed:sample": "node scripts/seed-sample-resource.js",
+    "seed:ann": "node scripts/seed-ann.js",
+    "seed:calendar": "node scripts/seed-calendar.js",
+    "seed:islamic": "node scripts/seed-islamic-resources.js",
+    "create-placeholders": "node scripts/create-placeholder-files.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.2",
+    "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
+    "crypto-js": "^4.2.0",
+    "csurf": "^1.11.0",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-session": "^1.17.3",
+    "express-validator": "^7.0.1",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.11.0",
+    "nodemailer": "^7.0.9",
+    "pdfkit": "^0.17.2",
+    "sequelize": "^6.37.3",
+    "slugify": "^1.6.6",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}

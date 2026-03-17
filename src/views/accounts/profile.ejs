@@ -1,0 +1,89 @@
+<% layout('layout') %>
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <h3 class="mb-0">My Profile</h3>
+  <div class="d-flex gap-2">
+    <a href="/profile/password" class="btn btn-sm btn-outline-success">
+      <i class="bi bi-shield-lock me-1"></i> Change Password
+    </a>
+    <a href="/" class="btn btn-sm btn-outline-secondary">
+      <i class="bi bi-house me-1"></i> Home
+    </a>
+  </div>
+</div>
+
+<div class="row g-4">
+  <!-- Profile info -->
+  <div class="col-lg-7">
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+        <h5 class="mb-3">Account Information</h5>
+
+        <dl class="row mb-0">
+          <dt class="col-sm-4 text-muted">Username</dt>
+          <dd class="col-sm-8 fw-semibold"><%= user.username %></dd>
+
+          <dt class="col-sm-4 text-muted">Email</dt>
+          <dd class="col-sm-8"><%= user.email %></dd>
+
+          <dt class="col-sm-4 text-muted">Name</dt>
+          <dd class="col-sm-8"><%= [user.firstName, user.lastName].filter(Boolean).join(' ') || '—' %></dd>
+
+          <dt class="col-sm-4 text-muted">Legacy Role</dt>
+          <dd class="col-sm-8">
+            <span class="badge bg-secondary"><%= user.role || 'MEMBER' %></span>
+            <% if (user.isSuperuser) { %>
+              <span class="badge bg-success text-lighter">Superuser</span>
+            <% } %>
+          </dd>
+
+          <dt class="col-sm-4 text-muted">RBAC Roles</dt>
+          <dd class="col-sm-8">
+            <% if (user.Roles && user.Roles.length) { %>
+              <div class="d-flex flex-wrap gap-2">
+                <% user.Roles.forEach(r => { %>
+                  <span class="badge bg-light border"><%= r.name %></span>
+                <% }) %>
+              </div>
+            <% } else { %>
+              <span class="text-muted">None assigned</span>
+            <% } %>
+          </dd>
+
+          <dt class="col-sm-4 text-muted">Joined</dt>
+          <dd class="col-sm-8"><%= new Date(user.createdAt).toLocaleString() %></dd>
+
+          <dt class="col-sm-4 text-muted">Last Updated</dt>
+          <dd class="col-sm-8"><%= new Date(user.updatedAt).toLocaleString() %></dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions / Info -->
+  <div class="col-lg-5">
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+        <h6 class="mb-3">Quick Actions</h6>
+        <div class="d-flex flex-wrap gap-2 mb-3">
+          <a href="/profile/password" class="btn btn-sm btn-success">
+            <i class="bi bi-key me-1"></i> Change Password
+          </a>
+          <% if (currentUser && (currentUser.isSuperuser || currentUser.role === 'ADMIN')) { %>
+            <a href="/admin/users" class="btn btn-sm btn-outline-success">
+              <i class="bi bi-people me-1"></i> Manage Users
+            </a>
+          <% } %>
+        </div>
+
+        <hr>
+
+        <h6 class="mb-2">About RBAC</h6>
+        <p class="small text-muted mb-0">
+          RBAC roles control your permissions in the system (e.g. uploading resources, publishing announcements, admin access).  
+          Contact an Ameer if you need changes to your assigned roles.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
