@@ -130,8 +130,8 @@ The platform provides a central hub for managing **resources, announcements, don
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/abbaphy/al_istiqama_mss_website.git
-cd al_istiqama_mss_website
+git clone https://github.com/ammusawa/MSSN-WEB-APP.git
+cd MSSN-WEB-APP
 npm install
 ```
 
